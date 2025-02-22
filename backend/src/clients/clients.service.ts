@@ -15,7 +15,14 @@ export class ClientsService {
   async findAll(): Promise<Client[]> {
     try {
       this.logger.log('Fetching all clients');
-      return await this.clientsRepository.find();
+      const clients = await this.clientsRepository.find();
+      // Переконуємося, що всі рядки в UTF-8
+      return clients.map(client => ({
+        ...client,
+        firstName: Buffer.from(client.firstName, 'utf8').toString(),
+        lastName: Buffer.from(client.lastName, 'utf8').toString(),
+        notes: client.notes ? Buffer.from(client.notes, 'utf8').toString() : null,
+      }));
     } catch (error) {
       this.logger.error('Error fetching clients:', error);
       throw error;
@@ -31,8 +38,18 @@ export class ClientsService {
   }
 
   async create(clientData: Partial<Client>): Promise<Client> {
-    const client = this.clientsRepository.create(clientData);
-    return this.clientsRepository.save(client);
+    try {
+      const client = this.clientsRepository.create({
+        ...clientData,
+        firstName: Buffer.from(clientData.firstName, 'utf8').toString(),
+        lastName: Buffer.from(clientData.lastName, 'utf8').toString(),
+        notes: clientData.notes ? Buffer.from(clientData.notes, 'utf8').toString() : null,
+      });
+      return await this.clientsRepository.save(client);
+    } catch (error) {
+      this.logger.error('Error creating client:', error);
+      throw error;
+    }
   }
 
   async update(id: string, clientData: Partial<Client>): Promise<Client> {
