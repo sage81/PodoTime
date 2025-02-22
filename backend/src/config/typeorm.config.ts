@@ -13,6 +13,8 @@ let typeOrmConfig: TypeOrmModuleOptions;
 
 try {
   const dbUrl = new URL(databaseUrl);
+  // Видаляємо початковий слеш з pathname
+  const database = dbUrl.pathname.replace(/^\//, '');
 
   typeOrmConfig = {
     type: 'postgres',
@@ -20,7 +22,7 @@ try {
     port: parseInt(dbUrl.port, 10),
     username: dbUrl.username,
     password: dbUrl.password,
-    database: dbUrl.pathname.split('/')[1],
+    database: database, // Використовуємо очищену назву бази даних
     entities: [Client],
     synchronize: false,
     ssl: {
@@ -34,7 +36,7 @@ try {
     host: dbUrl.hostname,
     port: dbUrl.port,
     username: dbUrl.username,
-    database: dbUrl.pathname.split('/')[1],
+    database: database,
   });
 } catch (error) {
   console.error('Error parsing DATABASE_PUBLIC_URL:', error);
