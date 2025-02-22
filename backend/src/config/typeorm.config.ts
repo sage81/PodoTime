@@ -33,6 +33,7 @@ try {
     extra: {
       max: 20,
       connectionTimeoutMillis: 5000,
+      client_encoding: 'UTF8',
     }
   };
 

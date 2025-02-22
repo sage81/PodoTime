@@ -16,13 +16,7 @@ export class ClientsService {
     try {
       this.logger.log('Fetching all clients');
       const clients = await this.clientsRepository.find();
-      // Переконуємося, що всі рядки в UTF-8
-      return clients.map(client => ({
-        ...client,
-        firstName: Buffer.from(client.firstName, 'utf8').toString(),
-        lastName: Buffer.from(client.lastName, 'utf8').toString(),
-        notes: client.notes ? Buffer.from(client.notes, 'utf8').toString() : null,
-      }));
+      return clients;
     } catch (error) {
       this.logger.error('Error fetching clients:', error);
       throw error;
@@ -39,12 +33,19 @@ export class ClientsService {
 
   async create(clientData: Partial<Client>): Promise<Client> {
     try {
+      if (!clientData.firstName || !clientData.lastName || !clientData.phone) {
+        throw new Error('Missing required fields');
+      }
+
       const client = this.clientsRepository.create({
         ...clientData,
-        firstName: Buffer.from(clientData.firstName, 'utf8').toString(),
-        lastName: Buffer.from(clientData.lastName, 'utf8').toString(),
-        notes: clientData.notes ? Buffer.from(clientData.notes, 'utf8').toString() : null,
+        // Переконуємося, що обов'язкові поля існують
+        firstName: clientData.firstName,
+        lastName: clientData.lastName,
+        phone: clientData.phone,
+        category: clientData.category || 'regular',
       });
+
       return await this.clientsRepository.save(client);
     } catch (error) {
       this.logger.error('Error creating client:', error);
