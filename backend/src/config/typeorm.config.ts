@@ -3,16 +3,12 @@ import { Client } from '../clients/client.entity';
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
   type: 'postgres',
-  host: process.env.PGHOST,
-  port: parseInt(process.env.PGPORT || '5432', 10),
-  username: process.env.PGUSER,
-  password: process.env.PGPASSWORD,
-  database: process.env.PGDATABASE,
+  url: process.env.DATABASE_PUBLIC_URL,
   entities: [Client],
-  synchronize: process.env.NODE_ENV !== 'production',
+  synchronize: false,
   ssl: {
     rejectUnauthorized: false
   },
-  logging: true,
+  logging: process.env.NODE_ENV !== 'production',
   logger: 'advanced-console',
 }; 
