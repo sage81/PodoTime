@@ -9,10 +9,12 @@ if (!databaseUrl) {
 
 console.log('Raw DATABASE_PUBLIC_URL:', databaseUrl);
 
+let typeOrmConfig: TypeOrmModuleOptions;
+
 try {
   const dbUrl = new URL(databaseUrl);
 
-  const config: TypeOrmModuleOptions = {
+  typeOrmConfig = {
     type: 'postgres',
     host: dbUrl.hostname,
     port: parseInt(dbUrl.port, 10),
@@ -34,9 +36,9 @@ try {
     username: dbUrl.username,
     database: dbUrl.pathname.split('/')[1],
   });
-
-  export { config as typeOrmConfig };
 } catch (error) {
   console.error('Error parsing DATABASE_PUBLIC_URL:', error);
   throw error;
-} 
+}
+
+export { typeOrmConfig }; 
