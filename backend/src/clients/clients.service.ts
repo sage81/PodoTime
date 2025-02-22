@@ -1,17 +1,25 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Client } from './client.entity';
 
 @Injectable()
 export class ClientsService {
+  private readonly logger = new Logger(ClientsService.name);
+
   constructor(
     @InjectRepository(Client)
     private readonly clientsRepository: Repository<Client>,
   ) {}
 
-  findAll(): Promise<Client[]> {
-    return this.clientsRepository.find();
+  async findAll(): Promise<Client[]> {
+    try {
+      this.logger.log('Fetching all clients');
+      return await this.clientsRepository.find();
+    } catch (error) {
+      this.logger.error('Error fetching clients:', error);
+      throw error;
+    }
   }
 
   async findOne(id: string): Promise<Client> {

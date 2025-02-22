@@ -30,6 +30,12 @@ try {
     },
     logging: true,
     logger: 'advanced-console',
+    // Додаємо налаштування для відлагодження
+    maxQueryExecutionTime: 1000,
+    extra: {
+      max: 20,
+      connectionTimeoutMillis: 5000,
+    }
   };
 
   console.log('Database config:', {
@@ -37,6 +43,7 @@ try {
     port: dbUrl.port,
     username: dbUrl.username,
     database: database,
+    ssl: true,
   });
 } catch (error) {
   console.error('Error parsing DATABASE_PUBLIC_URL:', error);
