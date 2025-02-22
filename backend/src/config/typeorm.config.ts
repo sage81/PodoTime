@@ -30,8 +30,6 @@ try {
     },
     logging: true,
     logger: 'advanced-console',
-    // Додаємо налаштування для відлагодження
-    maxQueryExecutionTime: 1000,
     extra: {
       max: 20,
       connectionTimeoutMillis: 5000,
