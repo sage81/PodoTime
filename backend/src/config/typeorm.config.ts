@@ -9,5 +9,6 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   ssl: {
     rejectUnauthorized: false
   },
-  logging: process.env.NODE_ENV !== 'production',
+  logging: true,
+  logger: 'advanced-console',
 }; 
