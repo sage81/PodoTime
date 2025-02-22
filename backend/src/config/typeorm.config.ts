@@ -1,17 +1,21 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { Client } from '../clients/client.entity';
 
-// Перевіряємо URL
-const dbUrl = process.env.DATABASE_PUBLIC_URL;
-console.log('Database URL:', dbUrl); // Для дебагу
-
-if (!dbUrl) {
-  throw new Error('DATABASE_PUBLIC_URL is not defined');
-}
+// Для дебагу
+console.log('Database Config:', {
+  host: 'yamanote.proxy.rlwy.net',
+  port: 42798,
+  username: 'postgres',
+  database: 'railway',
+});
 
 export const typeOrmConfig: TypeOrmModuleOptions = {
   type: 'postgres',
-  url: dbUrl,
+  host: 'yamanote.proxy.rlwy.net',
+  port: 42798,
+  username: 'postgres',
+  password: 'RwceZSmRQQxcIfMeRzVQenQkNtMFeTVq',
+  database: 'railway',
   entities: [Client],
   synchronize: false,
   ssl: {
