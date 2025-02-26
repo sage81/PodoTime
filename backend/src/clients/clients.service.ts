@@ -15,8 +15,7 @@ export class ClientsService {
   async findAll(): Promise<Client[]> {
     try {
       this.logger.log('Fetching all clients');
-      const clients = await this.clientsRepository.find();
-      return clients;
+      return await this.clientsRepository.find();
     } catch (error) {
       this.logger.error('Error fetching clients:', error);
       throw error;
@@ -39,11 +38,7 @@ export class ClientsService {
 
       const client = this.clientsRepository.create({
         ...clientData,
-        // Переконуємося, що обов'язкові поля існують
-        firstName: clientData.firstName,
-        lastName: clientData.lastName,
-        phone: clientData.phone,
-        category: clientData.category || 'regular',
+        category: clientData.category || 'regular'
       });
 
       return await this.clientsRepository.save(client);

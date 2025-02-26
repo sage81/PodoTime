@@ -1,5 +1,6 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { Client } from '../clients/client.entity';
+import { Client } from '../clients/entities/client.entity';
+import { Appointment } from '../appointments/entities/appointment.entity';
 
 // Перевіряємо наявність URL
 const databaseUrl = process.env.DATABASE_PUBLIC_URL;
@@ -23,11 +24,10 @@ try {
     username: dbUrl.username,
     password: dbUrl.password,
     database: database, // Використовуємо очищену назву бази даних
-    entities: [Client],
+    entities: [Client, Appointment],
+    migrations: [__dirname + '/../migrations/*{.ts,.js}'],
     synchronize: false,
-    ssl: {
-      rejectUnauthorized: false
-    },
+    ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
     logging: true,
     logger: 'advanced-console',
     extra: {

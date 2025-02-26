@@ -4,10 +4,19 @@ export interface Client {
   lastName: string;
   phone: string;
   email?: string;
-  category: 'regular' | 'vip';
+  category: string;
   notes?: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface NewClient {
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email?: string;
+  category: string;
+  notes?: string;
 }
 
 export interface Appointment {

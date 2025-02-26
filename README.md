@@ -7,17 +7,10 @@ CRM система для подолога з функціоналом запи�
 - `backend/` - NestJS backend API
 - `frontend/` - Vue.js frontend застосунок
 
-## Розробка
-
-### Backend
-
 ## API URL
 
-Production: podotime-production.up.railway.app
+Production: https://podotime-production.up.railway.app
 
-## Endpoints
+## API Examples
 
-- GET /clients - отримати список клієнтів
-- POST /clients - створити нового клієнта
-- PUT /clients/:id - оновити клієнта
-- DELETE /clients/:id - видалити клієнта
+### Create Client (PowerShell)
