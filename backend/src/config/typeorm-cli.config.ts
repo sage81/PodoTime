@@ -6,31 +6,27 @@ import { CreateClientsTable1708626000000 } from '../migrations/1708626000000-Cre
 import { CreateAppointmentsTable1708700000000 } from '../migrations/1708700000000-CreateAppointmentsTable';
 
 // Завантажуємо .env файл
-dotenv.config({ path: '.env' });
+dotenv.config();
 
 console.log('Checking environment:', {
-  DATABASE_URL: process.env.DATABASE_PUBLIC_URL,
-  NODE_ENV: process.env.NODE_ENV
+  DATABASE_URL: process.env.DATABASE_URL,
+  NODE_ENV: process.env.NODE_ENV,
 });
 
-if (!process.env.DATABASE_PUBLIC_URL) {
-  throw new Error('DATABASE_PUBLIC_URL is not defined');
-}
-
-const dbUrl = new URL(process.env.DATABASE_PUBLIC_URL);
-
-const config = new DataSource({
+const dataSource = new DataSource({
   type: 'postgres',
-  host: dbUrl.hostname,
-  port: parseInt(dbUrl.port, 10),
-  username: dbUrl.username,
-  password: dbUrl.password,
-  database: dbUrl.pathname.replace(/^\//, ''),
-  entities: [Client, Appointment],
-  migrations: [CreateClientsTable1708626000000, CreateAppointmentsTable1708700000000],
-  ssl: {
-    rejectUnauthorized: false
-  }
+  url: process.env.DATABASE_URL,
+  entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+  migrations: [__dirname + '/../migrations/*{.ts,.js}'],
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false,
+  // Додаємо параметри з'єднання для вирішення проблеми ECONNRESET
+  connectTimeoutMS: 30000, // 30 секунд
+  extra: {
+    connectionTimeoutMillis: 30000, // 30 секунд
+    query_timeout: 30000, // 30 секунд
+    statement_timeout: 30000, // 30 секунд
+    idle_in_transaction_session_timeout: 30000, // 30 секунд
+  },
 });
 
-export default config; 
+export default dataSource; 
